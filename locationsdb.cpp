@@ -29,6 +29,7 @@ void LocationsDB::initialiseDatabase() {
             country TEXT NOT NULL,
             latitude REAL NOT NULL,
             longitude REAL NOT NULL
+            UNIQUE(city, state, country)
         )
     )";
 
@@ -37,19 +38,23 @@ void LocationsDB::initialiseDatabase() {
     }
 }
 
-bool LocationsDB::addLocation(const Locations location) {
+bool LocationsDB::addLocation(Locations &location) {
     bool success{true};
-    QSqlQuery query;
-    query.prepare("INSERT INTO locations (city, state, country, latitude, longitude) VALUES (?, ?, ?, ?, ?)");
-    query.addBindValue(location.getCityName());
-    query.addBindValue(location.getStateName());
-    query.addBindValue(location.getCountryName());
-    query.addBindValue(location.getCityCoordinates().latitude());
-    query.addBindValue(location.getCityCoordinates().longitude());
+    if (cityExists(location)) {
+        qInfo() << "Location already saved on DB.";
+    } else {
+        QSqlQuery query;
+        query.prepare("INSERT INTO locations (city, state, country, latitude, longitude) VALUES (?, ?, ?, ?, ?)");
+        query.addBindValue(location.getCityName());
+        query.addBindValue(location.getStateName());
+        query.addBindValue(location.getCountryName());
+        query.addBindValue(location.getCityCoordinates().latitude());
+        query.addBindValue(location.getCityCoordinates().longitude());
 
-    if (!query.exec()) {
-        qCritical() << "Insert failed:" << query.lastError().text();
-        success = false;
+        if (!query.exec()) {
+            qCritical() << "Insert failed:" << query.lastError().text();
+            success = false;
+        }
     }
     return success;
 }
@@ -59,11 +64,11 @@ QVector<Locations> LocationsDB::getAllLocations() {
     QSqlQuery query("SELECT * FROM locations");
 
     while (query.next()) {
-        Locations loc{query.value("city").toString(),
+        Locations loc(query.value("city").toString(),
                       query.value("state").toString(),
                       query.value("country").toString(),
                       query.value("latitude").toDouble(),
-                      query.value("longitude").toDouble()};
+                      query.value("longitude").toDouble());
         locations.append(loc);
     }
     return locations;
@@ -76,21 +81,48 @@ Locations LocationsDB::getLocationById(int id) {
 
     Locations loc;
     if (query.exec() && query.next()) {
-        loc(query.value("city").toString(),
-            query.value("state").toString(),
-            query.value("country").toString(),
-            query.value("latitude").toDouble(),
-            query.value("longitude").toDouble());
+        loc = Locations(query.value("city").toString(),
+                        query.value("state").toString(),
+                        query.value("country").toString(),
+                        query.value("latitude").toDouble(),
+                        query.value("longitude").toDouble());
     }
     return loc;
 }
 
-bool LocationsDB::updateLocation(int id, Locations location) {
-    Q_UNUSED(location);
-    return true;
+bool LocationsDB::deleteLocation(Locations &location) {
+    bool success{true};
+    int id{getLocationId(location)};
+    if (id > 0) {
+        QSqlQuery query;
+        query.prepare("DELETE FROM locations WHERE id = ?");
+        query.addBindValue(id);
+
+        if (!query.exec()) {
+            qCritical() << "Delete failed:" << query.lastError().text();
+            success = false;
+        }
+    }
+    return success;
 }
 
-bool LocationsDB::deleteLocation(int id) {
-    Q_UNUSED(id);
-    return true;
+bool LocationsDB::cityExists(Locations &location) {
+    bool exists{false};
+    if (getLocationId(location) > 0) {
+        exists = true;
+    }
+    return exists;
+}
+int LocationsDB::getLocationId(Locations &location) {
+    int id{-1};
+    QSqlQuery query;
+    query.prepare("SELECT id FROM locations WHERE city = ? AND state = ? AND country = ?");
+    query.addBindValue(location.getCityName());
+    query.addBindValue(location.getStateName());
+    query.addBindValue(location.getCountryName());
+
+    if (query.exec() && query.next()) {
+        id = query.value(0).toInt();  // Return found ID
+    }
+    return id;
 }

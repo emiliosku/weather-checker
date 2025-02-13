@@ -8,10 +8,24 @@ Locations::Locations(const QString &city,
     : m_city{city},
       m_state{state},
       m_country{country},
-      m_latitude{latitude},
-      m_longitude{longitude} {
-    m_coordinates.setLatitude(m_latitude.toFloat());
-    m_coordinates.setLongitude(m_longitude.toFloat());
+      m_latitude{latitude.toFloat()},
+      m_longitude{longitude.toFloat()} {
+    m_coordinates.setLatitude(m_latitude);
+    m_coordinates.setLongitude(m_longitude);
+}
+
+Locations::Locations(const QString &city,
+                     const QString &state,
+                     const QString &country,
+                     const float latitude,
+                     const float longitude)
+    : m_city{city},
+    m_state{state},
+    m_country{country},
+    m_latitude{latitude},
+    m_longitude{longitude} {
+    m_coordinates.setLatitude(m_latitude);
+    m_coordinates.setLongitude(m_longitude);
 }
 
 QString Locations::getCityName() {
@@ -26,11 +40,11 @@ QString Locations::getCountryName() {
     return m_country;
 }
 
-QString Locations::getCityLatitude() {
+float Locations::getCityLatitude() {
     return m_latitude;
 }
 
-QString Locations::getCityLongitude() {
+float Locations::getCityLongitude() {
     return m_longitude;
 }
 

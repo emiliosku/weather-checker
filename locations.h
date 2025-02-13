@@ -10,11 +10,16 @@ private:
     QString m_city;
     QString m_state;
     QString m_country;
-    QString m_latitude;
-    QString m_longitude;
+    float m_latitude;
+    float m_longitude;
     QGeoCoordinate m_coordinates;
 
 public:
+    /**
+     * @brief Locations Default constructor
+     */
+    Locations() = default;
+
     /**
      * @brief Locations Private constructor.
      *
@@ -29,6 +34,21 @@ public:
               const QString &country,
               const QString &latitude,
               const QString &longitude);
+
+    /**
+     * @brief Locations Private constructor.
+     *
+     * @param city City name.
+     * @param state Province or state name.
+     * @param country Country name.
+     * @param latitude City latitude.
+     * @param longitude City longitude.
+     */
+    Locations(const QString &city,
+              const QString &state,
+              const QString &country,
+              const float latitude,
+              const float longitude);
     /**
      * @brief getCityName
      * @return
@@ -51,13 +71,13 @@ public:
      * @brief getCityLatitude
      * @return
      */
-    QString getCityLatitude();
+    float getCityLatitude();
 
     /**
      * @brief getCityLongitude
      * @return
      */
-    QString getCityLongitude();
+    float getCityLongitude();
 
     /**
      * @brief getCityCoordinates

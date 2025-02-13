@@ -22,13 +22,13 @@ public:
     explicit LocationsDB(QObject *parent = nullptr);
     ~LocationsDB();
 
-    bool addLocation(const Locations location);
+    bool addLocation(Locations &location);
     QVector<Locations> getAllLocations();
     Locations getLocationById(int id);
-    bool updateLocation(int id, Locations location);
-    bool deleteLocation(int id);
+    bool deleteLocation(Locations &location);
+    bool cityExists(Locations &location);
+    int getLocationId(Locations &location);
 
-signals:
 };
 
 #endif // LOCATIONSDB_H
