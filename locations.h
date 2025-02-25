@@ -21,7 +21,7 @@ public:
     Locations() = default;
 
     /**
-     * @brief Locations Private constructor.
+     * @brief Locations Custom constructor.
      *
      * @param city City name.
      * @param state Province or state name.
@@ -36,7 +36,7 @@ public:
               const QString &longitude);
 
     /**
-     * @brief Locations Private constructor.
+     * @brief Locations Custom constructor.
      *
      * @param city City name.
      * @param state Province or state name.
@@ -84,6 +84,11 @@ public:
      * @return
      */
     QGeoCoordinate getCityCoordinates();
+
+    /**
+     * @brief reset Resets all the location fields.
+     */
+    void reset();
 };
 
 #endif // LOCATIONS_H

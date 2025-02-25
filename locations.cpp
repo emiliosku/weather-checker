@@ -51,3 +51,12 @@ float Locations::getCityLongitude() {
 QGeoCoordinate Locations::getCityCoordinates() {
     return m_coordinates;
 }
+
+void Locations::reset() {
+    m_city = "";
+    m_state = "";
+    m_country = "";
+    m_latitude = 0.0;
+    m_longitude = 0.0;
+    m_coordinates = QGeoCoordinate(0.0,0.0);
+}

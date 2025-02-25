@@ -21,19 +21,16 @@ LocationsDB::~LocationsDB() {
 
 void LocationsDB::initialiseDatabase() {
     QSqlQuery query;
-    QString createTable = R"(
-        CREATE TABLE IF NOT EXISTS locations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            city TEXT NOT NULL,
-            state TEXT NOT NULL,
-            country TEXT NOT NULL,
-            latitude REAL NOT NULL,
-            longitude REAL NOT NULL
-            UNIQUE(city, state, country)
-        )
-    )";
+    query.prepare("CREATE TABLE IF NOT EXISTS locations ("
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "city TEXT NOT NULL, "
+                  "state TEXT NOT NULL, "
+                  "country TEXT NOT NULL, "
+                  "latitude REAL NOT NULL, "
+                  "longitude REAL NOT NULL, "
+                  "UNIQUE(city, state, country))");
 
-    if (!query.exec(createTable)) {
+    if (!query.exec()) {
         qCritical() << "Failed to create table:" << query.lastError().text();
     }
 }

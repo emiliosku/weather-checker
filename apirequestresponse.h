@@ -14,13 +14,10 @@ class APIRequestResponse : public QObject {
 private:
     Q_OBJECT
 
-    // Private objects that will only be used within this class.
-
     /**
      * @brief m_networkManager Object to handle network connections.
      */
     QNetworkAccessManager *m_networkManager;
-
 
 public:
     // Class constructor and destructor
@@ -49,16 +46,17 @@ private:
     QJsonObject parseResponse(QNetworkReply *reply);
 
 signals:
+    /**
+     * @brief requestCompleted Emitted when a response from an API has been received and parsed.
+     * @param response The response received from the API.
+     */
     void requestCompleted(const QJsonObject &response);
 
-public slots:
-    /**
-     * @brief manageResponse Handles the response when it has already been parsed.
-     * @param response Parsed response received from the API.
-     */
-    void manageResponse(const QJsonObject &response);
-
 private slots:
+    /**
+     * @brief onRequestFinished Emitted when a response has been received from an API.
+     * @param reply The raw response received from the API.
+     */
     void onRequestFinished(QNetworkReply *reply);
 };
 

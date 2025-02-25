@@ -62,20 +62,3 @@ QJsonObject APIRequestResponse::parseResponse(QNetworkReply *reply)
 
     return jsonResponse;
 }
-
-void APIRequestResponse::manageResponse(const QJsonObject &response) {
-    QJsonArray jsonArray = response.value("data").toArray();
-    if (!jsonArray.isEmpty()) {
-        QJsonObject firstResult = jsonArray.first().toObject();
-        QString name = firstResult.value("display_name").toString();
-        QString lat = firstResult.value("lat").toString();
-        QString lon = firstResult.value("lon").toString();
-
-        qDebug() << "Nom:" << name;
-        qDebug() << "Latitud:" << lat;
-        qDebug() << "Longitud:" << lon;
-    }
-    else {
-        qDebug() << "No s'han trobat resultats.";
-    }
-}

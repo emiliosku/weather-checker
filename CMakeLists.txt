@@ -55,6 +55,7 @@ qt_add_executable(weather-checker
     locationsmanager.h locationsmanager.cpp
     locations.h locations.cpp
     locationsdb.h locationsdb.cpp
+
 )
 
 qt_add_translations(

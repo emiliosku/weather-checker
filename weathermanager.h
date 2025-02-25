@@ -5,6 +5,8 @@
 #include <QDateTime>
 #include <QDebug>
 
+#include "locations.h"
+
 class WeatherManager : public QObject {
 private:
     Q_OBJECT
