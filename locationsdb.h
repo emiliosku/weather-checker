@@ -25,14 +25,21 @@ private:
     void initialiseDatabase();
 
     /**
-     * @brief reorderDatabase
+     * @brief reorderDatabase Brings back order to the database IDs (1,2,3, and so on).
      * @return
      */
     bool reorderDatabase();
 
 public:
-    // Class constructor and destructor
+    /**
+     * @brief LocationsDB Constructor for the LocationsDB class.
+     * @param parent The parent QObject (if any).
+     */
     explicit LocationsDB(QObject *parent = nullptr);
+
+    /**
+     * @brief Destructor for the LocationsDB class.
+     */
     ~LocationsDB();
 
     /**

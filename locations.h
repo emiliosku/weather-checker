@@ -7,11 +7,34 @@
 class Locations {
 private:
 
+    /**
+     * @brief m_city Stores the name of the city.
+     */
     QString m_city;
+
+    /**
+     * @brief m_state Stores the name of the state or region.
+     */
     QString m_state;
+
+    /**
+     * @brief m_country Stores the name of the country.
+     */
     QString m_country;
+
+    /**
+     * @brief m_latitude Represents the latitude coordinate.
+     */
     float m_latitude;
+
+    /**
+     * @brief m_longitude Represents the longitude coordinate.
+     */
     float m_longitude;
+
+    /**
+     * @brief m_coordinates Stores the geographic coordinates (latitude and longitude) as a QGeoCoordinate object.
+     */
     QGeoCoordinate m_coordinates;
 
 public:
@@ -50,38 +73,38 @@ public:
               const float latitude,
               const float longitude);
     /**
-     * @brief getCityName
-     * @return
+     * @brief getCityName Gets the location city name.
+     * @return The location city name.
      */
     QString getCityName();
 
     /**
-     * @brief getStateName
-     * @return
+     * @brief getStateName Gets the location state name.
+     * @return The location state name.
      */
     QString getStateName();
 
     /**
-     * @brief getCountryName
-     * @return
+     * @brief getCountryName Gets the location country name.
+     * @return The location country name.
      */
     QString getCountryName();
 
     /**
-     * @brief getCityLatitude
-     * @return
+     * @brief getCityLatitude Gets the location Latitude.
+     * @return The location latitude.
      */
     float getCityLatitude();
 
     /**
-     * @brief getCityLongitude
-     * @return
+     * @brief getCityLongitude Gets the location longitude.
+     * @return The location longitude.
      */
     float getCityLongitude();
 
     /**
-     * @brief getCityCoordinates
-     * @return
+     * @brief getCityCoordinates Gets the location coordinates.
+     * @return The location coordinates
      */
     QGeoCoordinate getCityCoordinates();
 

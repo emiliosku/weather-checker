@@ -20,8 +20,15 @@ private:
     QNetworkAccessManager *m_networkManager;
 
 public:
-    // Class constructor and destructor
+    /**
+     * @brief APIRequestResponse Constructor for the APIRequestResponse class.
+     * @param parent The parent QObject (if any).
+     */
     explicit APIRequestResponse(QObject *parent = nullptr);
+
+    /**
+     * @brief Destructor for the APIRequestResponse class.
+     */
     ~APIRequestResponse();
 
     /**
@@ -32,7 +39,7 @@ public:
 
     /**
      * @brief sendPostRequest Sends a POST request to the provided URL.
-     * @param url API's URL
+     * @param url API's URL.
      * @param payload Payload of the sent request.
      */
     void sendPostRequest(const QString &url, const QJsonObject &payload);
