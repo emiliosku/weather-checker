@@ -37,6 +37,14 @@ public:
      */
     QString getLocationFieldText() const;
 
+private:
+    /**
+     * @brief joinCityAddress
+     * @param location
+     * @return
+     */
+    QString joinCityAddress(Locations &location) const;
+
 private slots:
     /**
      * @brief on_pb_sendLocationQuery_clicked
@@ -56,6 +64,16 @@ private slots:
     void setLocationDatabaseButtonsVisibility(Locations &location);
 
     /**
+     * @brief updateDatabaseLocationsList
+     */
+    void updateDatabaseLocationsList();
+
+    /**
+     * @brief clearSearchItems
+     */
+    void clearSearchItems();
+
+    /**
      * @brief on_pb_addToDb_clicked
      */
     void on_pb_addToDb_clicked();
@@ -64,5 +82,11 @@ private slots:
      * @brief on_pb_removeFromDb_clicked
      */
     void on_pb_removeFromDb_clicked();
+
+    /**
+     * @brief on_l_database_doubleClicked
+     * @param index
+     */
+    void on_l_database_doubleClicked(const QModelIndex &index);
 };
 #endif // MAINWINDOW_H

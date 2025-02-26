@@ -58,6 +58,25 @@ public:
      */
     bool deleteCurrentLocationFromDatabase();
 
+    /**
+     * @brief getAllLocationsFromDatabase
+     * @return
+     */
+    QVector<Locations> getAllLocationsFromDatabase();
+
+    /**
+     * @brief getLocationFromDatabase
+     * @param locationId
+     * @return
+     */
+    Locations getLocationFromDatabase(int locationId);
+
+    /**
+     * @brief setCurrentLocationFromDatabase
+     * @param locationId
+     */
+    void setCurrentLocationFromDatabase(int locationId);
+
 public slots:
     /**
      * @brief handleLocationMetadataResponseFromApi
@@ -75,10 +94,6 @@ private:
      */
     QString getLocationQuery(const QString &locationName);
 
-    // Locations getLocationFromDatabase(int locationId);
-
-    // QVector<Locations> getAllLocationsFromDatabase();
-
 signals:
     /**
      * @brief waitingForLocationUpdate
@@ -90,6 +105,11 @@ signals:
      * @param location
      */
     void locationUpdated(Locations &location);
+
+    /**
+     * @brief databaseUpdated Emitted when there's been a change on the database.
+     */
+    void databaseUpdated();
 };
 
 #endif // LOCATIONSMANAGER_H

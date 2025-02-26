@@ -24,6 +24,12 @@ private:
      */
     void initialiseDatabase();
 
+    /**
+     * @brief reorderDatabase
+     * @return
+     */
+    bool reorderDatabase();
+
 public:
     // Class constructor and destructor
     explicit LocationsDB(QObject *parent = nullptr);

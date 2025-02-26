@@ -24,24 +24,37 @@ bool LocationsManager::getIsLocationAlreadyInDatabase(Locations &location) {
 }
 
 bool LocationsManager::addCurrentLocationToDatabase() {
-    return m_database.addLocation(m_location);
+    const bool success = m_database.addLocation(m_location);
+    if (success) {
+        emit databaseUpdated();
+    }
+    return success;
 }
 
 bool LocationsManager::deleteCurrentLocationFromDatabase() {
-    return m_database.deleteLocation(m_location);
+    const bool success = m_database.deleteLocation(m_location);
+    if (success) {
+        emit databaseUpdated();
+    }
+    return success;
+}
+
+QVector<Locations> LocationsManager::getAllLocationsFromDatabase() {
+    return m_database.getAllLocations();
+}
+
+Locations LocationsManager::getLocationFromDatabase(int locationId) {
+    return m_database.getLocationById(locationId);
+}
+
+void LocationsManager::setCurrentLocationFromDatabase(int locationId) {
+    m_location = m_database.getLocationById(locationId);
+    emit locationUpdated(m_location);
 }
 
 QString LocationsManager::getLocationQuery(const QString &locationName) {
     return QString("https://nominatim.openstreetmap.org/search?q=%1&format=json&addressdetails=1").arg(locationName);
 }
-
-// Locations LocationsManager::getLocationFromDatabase(int locationId) {
-
-// }
-
-// QVector<Locations> LocationsManager::getAllLocationsFromDatabase() {
-
-// }
 
 bool LocationsManager::handleLocationMetadataResponseFromApi(const QJsonObject &response) {
     bool success = true;

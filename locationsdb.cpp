@@ -100,6 +100,9 @@ bool LocationsDB::deleteLocation(Locations &location) {
             success = false;
         }
     }
+    if (success) {
+        success = reorderDatabase();
+    }
     return success;
 }
 
@@ -122,4 +125,75 @@ int LocationsDB::getLocationId(Locations &location) {
         id = query.value(0).toInt();  // Return found ID
     }
     return id;
+}
+
+bool LocationsDB::reorderDatabase() {
+    bool success{true};
+    QSqlQuery query(m_locationsDatabase);
+
+    // Begin transaction for atomicity
+    m_locationsDatabase.transaction();
+
+    // Create temporary table with the same structure as the original but with reordered IDs
+    if (success) {
+        query.prepare("CREATE TABLE temp_locations ("
+                      "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                      "city TEXT NOT NULL, "
+                      "state TEXT NOT NULL, "
+                      "country TEXT NOT NULL, "
+                      "latitude REAL NOT NULL, "
+                      "longitude REAL NOT NULL, "
+                      "UNIQUE(city, state, country))");
+
+        if (!query.exec()) {
+            qCritical() << "Failure creating temp table structure:" << query.lastError().text();
+            success = false;
+        }
+    }
+
+    // Copy data with reordered IDs
+    if (success) {
+        query.prepare("INSERT INTO temp_locations (city, state, country, latitude, longitude) "
+                      "SELECT city, state, country, latitude, longitude "
+                      "FROM locations "
+                      "ORDER BY id");
+
+        if (!query.exec()) {
+            qCritical() << "Failure copying data to temp table:" << query.lastError().text();
+            success = false;
+        }
+    }
+
+    // Drop the original table
+    if (success) {
+        query.prepare("DROP TABLE locations");
+        if (!query.exec()) {
+            qCritical() << "Failure dropping old table:" << query.lastError().text();
+            success = false;
+        }
+    }
+
+    // Rename the temporary table
+    if (success) {
+        query.prepare("ALTER TABLE temp_locations RENAME TO locations");
+        if (!query.exec()) {
+            qCritical() << "Failure renaming new table:" << query.lastError().text();
+            success = false;
+        }
+    }
+
+    // Handle transaction completion
+    if (success) {
+        if (!m_locationsDatabase.commit()) {
+            qCritical() << "Transaction commit failed:" << m_locationsDatabase.lastError().text();
+            success = false;
+        }
+    }
+
+    // If any step failed, rollback the transaction
+    if (!success) {
+        m_locationsDatabase.rollback();
+    }
+
+    return success;
 }
